@@ -7,7 +7,8 @@ module.exports = {
         if (!nodeArgs[3]) {
             console.error('ERROR: an artist or band is required');
             return;
-        } 
+        }
+        // identify the artist
         var artist = utils.buildName(nodeArgs);
         console.log('the artist is: ' + artist);
 
@@ -16,7 +17,6 @@ module.exports = {
 
         axios.get(queryUrl).then(
             function(response) {
-                // console.log(response.data); 
                 for (var eachVenue = 0; eachVenue < response.data.length; eachVenue++) {
                     console.log( `
                         venue: ${response.data[eachVenue].venue.name}

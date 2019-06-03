@@ -5,31 +5,36 @@ var utils   = require("./utils");
 
 module.exports = {
     findSong: function (nodeArgs) {
+
         // identify the song
-        var song = '';
-        if (!nodeArgs[3]) {
-            song = 'The Sign';
-        } else {
+        var song = 'The+Sign';  // default song if no song provided
+        if (nodeArgs[3]) {
             song = utils.buildName(nodeArgs);
         }
-        console.log('the song is: ' + song);
+        var rawSong = song.replace(/\+/g, ' ').toLowerCase();
+        console.log('the song is: ' + rawSong);
 
         // setup spotify
         var spotify = new Spotify(keys.spotify);
         spotify
             .search({ type: 'track', query: song })
             .then(function(response) {
-                // console.log(response);
-                // console.log(response.tracks.items[0]);
-
+                // if song not found
+                if (response.tracks.items.length === 0) {
+                    console.log(rawSong + " not found!")
+                }
+                // for every item returned
                 for (var i = 0; i < response.tracks.items.length; i++) {
-                    console.log( `
+                    // if there is a match with the song title
+                    if (response.tracks.items[i].name.toLowerCase() === rawSong) {
+                        console.log( `
                         artist: ${response.tracks.items[i].artists[0].name} 
                         song: ${response.tracks.items[i].name}
                         link: ${response.tracks.items[i].external_urls.spotify}
                         album: ${response.tracks.items[i].album.name}
                         `
-                    );
+                        );
+                    }
                 }
             })
             .catch(function(err) {

@@ -1,7 +1,7 @@
-require("dotenv").config();
+// require("dotenv").config();
 var concert = require("./concert.js");
 var song    = require("./song.js");
-// var movie   = require("./movie.js");
+var movie   = require("./movie.js");
 
 // get a managable reference to the args
 var nodeArgs = process.argv;
@@ -14,8 +14,9 @@ switch (liriCommand) {
     case 'spotify-this-song':
         song.findSong(nodeArgs);
         break;
-    // case 'movie-this':
-        // movie.findMovie(nodeArgs);
+    case 'movie-this':
+        movie.findMovie(nodeArgs);
+        break;
     default:
             console.error('ERROR: This command is not supported');
             break;
