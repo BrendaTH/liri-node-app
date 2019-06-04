@@ -1,4 +1,4 @@
-var utils   = require("./utils");
+var utils   = require("./utils.js");
 var axios   = require("axios");
 
 module.exports = {
@@ -10,7 +10,6 @@ module.exports = {
         }
 
         var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
-
         axios.get(queryUrl).then(
             function(response) {
                 if (response.data.Error) {
@@ -19,8 +18,8 @@ module.exports = {
                     console.log( `
                     Title: ${response.data.Title} 
                     Year: ${response.data.Year}
-                    IMDB Rating: ${response.data.Ratings[0].Value}
-                    Rotten Tomatoes Rating: ${response.data.Ratings[1].Value}
+                    IMDB Rating: ${response.data.Ratings.length > 0 ? response.data.Ratings[0].Value : 'N/A' }
+                    Rotten Tomatoes Rating: ${response.data.Ratings.length > 0 ? response.data.Ratings[1].Value : 'N/A'}
                     Country: ${response.data.Country}
                     Language: ${response.data.Language}
                     Plot: ${response.data.Plot}
@@ -47,7 +46,7 @@ module.exports = {
                 // Something happened in setting up the request that triggered an Error
                 console.log("Error", error.message);
               }
-              console.log(error.config);
+              console.log(`catch ${e.config}`);
             });
 
     }  // end findMovie method

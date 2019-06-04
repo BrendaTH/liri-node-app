@@ -17,17 +17,39 @@ module.exports = {
 
         axios.get(queryUrl).then(
             function(response) {
+                // handle the case where artist not found
+                if (!response || !response.data || !response.data[0] || !response.data[0].venue) {
+                    console.log('ERROR: there was a problem with the artist');
+                    return console.error(response.data);
+                }
                 for (var eachVenue = 0; eachVenue < response.data.length; eachVenue++) {
                     console.log( `
                         venue: ${response.data[eachVenue].venue.name}
                         location: ${response.data[eachVenue].venue.city} ${response.data[eachVenue].venue.region}
                         date: ${moment(response.data[eachVenue].datetime).format('MM/DD/YYYY')}
                         `
-                    );
+                        );
                 }
             })
-            .catch(function(error) {
-                console.error(error);
+            .catch(function(e) {
+                if (e.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    console.log("---------------Data---------------");
+                    console.log(e.response.data);
+                    console.log("---------------Status---------------");
+                    console.log(e.response.status);
+                    console.log("---------------Status---------------");
+                    console.log(e.response.headers);
+                  } else if (e.request) {
+                    // The request was made but no response was received
+                    // error.request is an object that comes back with details pertaining to the error that occurred.
+                    console.log(e.request);
+                  } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log("Error", e.message);
+                  }
+                console.error(`catch(${e})`);
             });
 
     }, // end findArtist method
